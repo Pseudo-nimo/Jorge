@@ -1,12 +1,12 @@
 import random
 import sys
-import pygame as pygame
+import pygame
 import ctypes
 
 myappid = 'mycompany.myproduct.subproduct.version'  # arbitrary string
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 vivo = False
-jump_Speed = 8
+jump_Speed = 9
 clock = pygame.time.Clock()
 Jump = 39  # final
 pontos = 0
@@ -15,6 +15,13 @@ lin_y = -100
 running = True
 pulo = True
 etapa = 1
+# fonte
+pygame.font.init()
+fonte = pygame.font.get_default_font()
+fontesys = pygame.font.SysFont(fonte, 30)
+txt = f"Pontuação: {pontos}"
+txttela = fontesys.render(txt, True, (0, 0, 0))
+
 # criando janela e iniciando
 pygame.init()
 display = pygame.display.set_mode([800, 600])
@@ -25,7 +32,7 @@ pygame.display.set_caption("Jorge")
 # inicio
 tela = pygame.sprite.Sprite()
 tela.image = pygame.image.load("noite2.jpg")
-tela.rect = pygame.Rect([0, 0, 800, 600])
+tela.rect = tela.image.get_rect()
 
 inicio = pygame.sprite.Sprite()
 inicio.image = pygame.image.load("BOTAO.png")
@@ -38,42 +45,41 @@ fase.rect = fase.image.get_rect()
 
 piso1 = pygame.sprite.Sprite()
 piso1.image = pygame.image.load("piso.jpg")  # qual imagem
-piso1.rect = pygame.Rect([0, 550, 3000, 50])  # x,y, tamanho_x(l), tamanho_y(h)
-
+piso1.rect = piso1.image.get_rect()  # x,y, tamanho_x(l), tamanho_y(h)
+piso1.rect.bottom=600
 piso2 = pygame.sprite.Sprite()
 piso2.image = pygame.image.load("piso.jpg")  # qual imagem
-piso2.rect = pygame.Rect([2400, 550, 3000, 50])  # x,y, tamanho_x(l), tamanho_y(h)
-
+piso2.rect = piso1.image.get_rect()  # x,y, tamanho_x(l), tamanho_y(h)
+piso2.rect.bottom=600
 # personagem
 guy = pygame.sprite.Sprite()
 guy.image = pygame.image.load("ave.png")  # qual imagem
 # guy.image = pygame.transform.scale(guy.image, [60, 49])
-guy.rect = pygame.Rect([400, 200, 50, 50])  # x,y, tamanho_x(l), tamanho_y(h)
+guy.rect = guy.image.get_rect()#pygame.Rect([400, 200, 50, 50])  # x,y, tamanho_x(l), tamanho_y(h)
 
 # canos
 cano1 = pygame.sprite.Sprite()
 cano1.image = pygame.image.load("canos_a.png")
 # cano1.image = pygame.transform.scale(cano1.image, [118,393])
-cano1.rect = pygame.Rect([700, 0, 118, 393])
+cano1.rect = cano1.image.get_rect()
 cano1.rect.top = random.randint(lim_y, lin_y)
 
 cano2 = pygame.sprite.Sprite()
 cano2.image = pygame.image.load("canos_b.png")
-# cano2.image = pygame.transform.scale(cano2.image, [118,393])
-cano2.rect = pygame.Rect([700, 0, 118, 393])
+cano2.rect = cano2.image.get_rect()
 cano2.rect.top = (cano1.rect.bottom + 200)
 cano2.rect.centerx = cano1.rect.centerx
 
 cano3 = pygame.sprite.Sprite()
 cano3.image = pygame.image.load("canos_a.png")
 # cano1.image = pygame.transform.scale(cano1.image, [118,393])
-cano3.rect = pygame.Rect([1100, 0, 118, 393])
+cano3.rect = cano1.image.get_rect()
 cano3.rect.top = random.randint(lim_y, lin_y)
 
 cano4 = pygame.sprite.Sprite()
 cano4.image = pygame.image.load("canos_b.png")
 # cano2.image = pygame.transform.scale(cano2.image, [118,393])
-cano4.rect = pygame.Rect([1100, 0, 118, 393])
+cano4.rect = cano1.image.get_rect()
 cano4.rect.top = (cano3.rect.bottom + 200)
 cano4.rect.centerx = cano3.rect.centerx
 
@@ -86,13 +92,13 @@ preto = pygame.image.load("preto.png").convert()
 
 botao_Tentar = pygame.sprite.Sprite()
 botao_Tentar.image = pygame.image.load("Tentar novamente.png")
-botao_Tentar.rect = pygame.Rect(0, 0, 200, 109)
+botao_Tentar.rect = botao_Tentar.image.get_rect()
 botao_Tentar.rect.centerx = 550
 botao_Tentar.rect.bottom = 450
 
 Sair = pygame.sprite.Sprite()
 Sair.image = pygame.image.load("Sair.png")
-Sair.rect = pygame.Rect(0, 0, 200, 109)
+Sair.rect = Sair.image.get_rect()
 Sair.rect.bottom = 450
 Sair.rect.centerx = 250
 
@@ -119,10 +125,7 @@ grupo.add(piso2)
 pygame.mixer.music.load("Musica fofa.mp3")
 pygame.mixer.music.play(0)
 
-# fonte
-pygame.font.init()
-fonte = pygame.font.get_default_font()
-fontesys = pygame.font.SysFont(fonte, 30)
+
 
 # jogo
 
@@ -176,15 +179,14 @@ while running:
                 vivo = False
                 # a
 
-            # pontuacao
-            txt = f"Pontuação: {pontos}"
-
+            
             # manutencao
 
             grupo.draw(display)
             persona.draw(display)
-            txttela = fontesys.render(txt, True, (0, 0, 0))
+            
             display.blit(txttela, (50, 500))
+
             if not vivo:
                 Jump = 39
             if Jump < 15:
@@ -200,25 +202,22 @@ while running:
             # cano
 
             cano2.rect.centerx = cano1.rect.centerx
-
             cano4.rect.centerx = cano3.rect.centerx
             if cano1.rect.right < 0:
                 cano1.rect.left = 850
+                pontos+=1
                 cano1.rect.top = random.randint(lim_y, lin_y)
 
                 cano2.rect.top = (cano1.rect.bottom + 200)
             if cano3.rect.right < 0:
                 cano3.rect.left = 850
+                pontos+=1
                 cano3.rect.top = random.randint(lim_y, lin_y)
 
                 cano4.rect.top = (cano3.rect.bottom + 200)
             if piso2.rect.x < (-1000):
                 piso2.rect.x = -100
                 # if piso1.rect.x:# .rect.x=-10
-            if cano3.rect.centerx == fase.rect.centerx:
-                pontos += 1
-            if cano1.rect.centerx == fase.rect.centerx:
-                pontos += 1
             if vivo:
                 cano1.rect.left -= 4
                 cano3.rect.left -= 4
