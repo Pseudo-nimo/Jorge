@@ -1,10 +1,7 @@
 import random
 import sys
 import pygame
-import ctypes
 
-myappid = 'mycompany.myproduct.subproduct.version'  # arbitrary string
-ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
 vivo = False
 jump_Speed = 9
 clock = pygame.time.Clock()
@@ -15,6 +12,7 @@ lin_y = -100
 running = True
 pulo = True
 etapa = 1
+
 # fonte
 pygame.font.init()
 fonte = pygame.font.get_default_font()
@@ -22,7 +20,6 @@ fontesys = pygame.font.SysFont(fonte, 30)
 txt = f"Pontuação: {pontos}"
 txttela = fontesys.render(txt, True, (0, 0, 0))
 
-# criando janela e iniciando
 pygame.init()
 display = pygame.display.set_mode([800, 600])
 icone = pygame.image.load("ave.png")
@@ -55,12 +52,12 @@ piso2.rect.bottom=600
 guy = pygame.sprite.Sprite()
 guy.image = pygame.image.load("ave.png")  # qual imagem
 # guy.image = pygame.transform.scale(guy.image, [60, 49])
-guy.rect = guy.image.get_rect()#pygame.Rect([400, 200, 50, 50])  # x,y, tamanho_x(l), tamanho_y(h)
+guy.rect = guy.image.get_rect()#pygame.Rect([400, 200, 50, 50])  
 
 # canos
 cano1 = pygame.sprite.Sprite()
 cano1.image = pygame.image.load("canos_a.png")
-# cano1.image = pygame.transform.scale(cano1.image, [118,393])
+
 cano1.rect = cano1.image.get_rect()
 cano1.rect.top = random.randint(lim_y, lin_y)
 
