@@ -69,18 +69,17 @@ cano2.rect.centerx = cano1.rect.centerx
 
 cano3 = pygame.sprite.Sprite()
 cano3.image = pygame.image.load("canos_a.png")
-# cano1.image = pygame.transform.scale(cano1.image, [118,393])
+
 cano3.rect = cano1.image.get_rect()
 cano3.rect.top = random.randint(lim_y, lin_y)
 
 cano4 = pygame.sprite.Sprite()
 cano4.image = pygame.image.load("canos_b.png")
-# cano2.image = pygame.transform.scale(cano2.image, [118,393])
 cano4.rect = cano1.image.get_rect()
 cano4.rect.top = (cano3.rect.bottom + 200)
 cano4.rect.centerx = cano3.rect.centerx
 
-# preto = pygame.sprite.Sprite()
+
 preto = pygame.image.load("preto.png").convert()
 # preto.rect = pygame.Rect([0, 0, 1000, 800])
 
@@ -106,7 +105,7 @@ grupo = pygame.sprite.Group()
 tela_Final = pygame.sprite.Group()
 comeco.add(tela)
 comeco.add(inicio)
-# tela_Final.add(gameover)
+
 tela_Final.add(botao_Tentar)
 tela_Final.add(Sair)
 persona.add(guy)
@@ -131,7 +130,7 @@ def setup():
     guy.rect.centerx = fase.rect.centerx
 
 while running:
-    if __name__ == "__main__":
+    if True:
         
 
         keys = pygame.key.get_pressed()  # boolean
@@ -265,6 +264,3 @@ while running:
             pygame.display.update()  # Update the screen
             clock.tick(60)
 
-if not running:
-    pygame.quit()
-    exit()
