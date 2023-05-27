@@ -51,8 +51,8 @@ piso2.rect.bottom=600
 # personagem
 guy = pygame.sprite.Sprite()
 guy.image = pygame.image.load("ave.png")  # qual imagem
-# guy.image = pygame.transform.scale(guy.image, [60, 49])
-guy.rect = guy.image.get_rect()#pygame.Rect([400, 200, 50, 50])  
+
+guy.rect = guy.image.get_rect()
 
 # canos
 cano1 = pygame.sprite.Sprite()
@@ -123,14 +123,16 @@ pygame.mixer.music.load("Musica fofa.mp3")
 pygame.mixer.music.play(0)
 
 
+setup()
 
-# jogo
+def setup():
+    cano1.rect.left = 800
+    cano3.rect.left = 1300
+    guy.rect.centerx = fase.rect.centerx
 
 while running:
     if __name__ == "__main__":
-        cano1.rect.left = 800
-        cano3.rect.left = 1300
-        guy.rect.centerx = fase.rect.centerx
+        
 
         keys = pygame.key.get_pressed()  # boolean
         while etapa == 1:
