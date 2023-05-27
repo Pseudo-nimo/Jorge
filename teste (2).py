@@ -13,6 +13,12 @@ running = True
 pulo = True
 etapa = 1
 
+# grupo
+comeco = pygame.sprite.Group()
+persona = pygame.sprite.Group()
+grupo = pygame.sprite.Group()
+tela_Final = pygame.sprite.Group()
+
 # fonte
 pygame.font.init()
 fonte = pygame.font.get_default_font()
@@ -40,14 +46,14 @@ fase = pygame.sprite.Sprite()
 fase.image = pygame.image.load("noite.jpg")
 fase.rect = fase.image.get_rect()
 
-piso1 = pygame.sprite.Sprite()
-piso1.image = pygame.image.load("piso.jpg")  # qual imagem
-piso1.rect = piso1.image.get_rect()  # x,y, tamanho_x(l), tamanho_y(h)
-piso1.rect.bottom=600
-piso2 = pygame.sprite.Sprite()
-piso2.image = pygame.image.load("piso.jpg")  # qual imagem
-piso2.rect = piso1.image.get_rect()  # x,y, tamanho_x(l), tamanho_y(h)
-piso2.rect.bottom=600
+for i in range(2):
+    pisu[i] = pygame.sprite.Sprite()
+    pisu[i].image = pygame.image.load("piso.jpg")
+    pisu[i].rect = pisu[i].image.get_rect()
+    pisu[i].rect.bottom = 600
+    grupo.add(pisu[i])
+
+
 # personagem
 guy = pygame.sprite.Sprite()
 guy.image = pygame.image.load("ave.png")  # qual imagem
@@ -98,11 +104,7 @@ Sair.rect = Sair.image.get_rect()
 Sair.rect.bottom = 450
 Sair.rect.centerx = 250
 
-# grupo
-comeco = pygame.sprite.Group()
-persona = pygame.sprite.Group()
-grupo = pygame.sprite.Group()
-tela_Final = pygame.sprite.Group()
+
 comeco.add(tela)
 comeco.add(inicio)
 
@@ -114,8 +116,8 @@ grupo.add(cano1)
 grupo.add(cano2)
 grupo.add(cano3)
 grupo.add(cano4)
-grupo.add(piso1)
-grupo.add(piso2)
+grupo.add(pisu[0])
+grupo.add(pisu[1])
 
 # musica
 pygame.mixer.music.load("Musica fofa.mp3")
@@ -219,8 +221,8 @@ while running:
             if vivo:
                 cano1.rect.left -= 4
                 cano3.rect.left -= 4
-                piso1.rect.x -= 4
-                piso2.rect.x -= 4
+                piso[0].rect.x -= 4
+                piso[1].rect.x -= 4
                 if Jump < 40:
                     Jump += 1
             pygame.display.update()
