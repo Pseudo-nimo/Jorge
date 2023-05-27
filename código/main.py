@@ -1,20 +1,24 @@
 import random
 import sys
 import pygame
-import parede.parede
+import parede
 
 vivo = False
+speed = 4
 pisu = [pygame.sprite.Sprite(), pygame.sprite.Sprite()]
-jump_Speed = 9
+jump_Speed = 5
 clock = pygame.time.Clock()
-Jump = 39  # final
+Jump = 20   # final
 pontos = 0
 lim_y = -314
 lin_y = -100
 running = True
 pulo = True
 etapa = 1
-
+def setup():
+    cano1.rect.left = 800
+    cano3.rect.left = 1300
+    guy.rect.centerx = fase.rect.centerx
 # grupo
 comeco = pygame.sprite.Group()
 persona = pygame.sprite.Group()
@@ -30,27 +34,27 @@ txttela = fontesys.render(txt, True, (0, 0, 0))
 
 pygame.init()
 display = pygame.display.set_mode([800, 600])
-icone = pygame.image.load("ave.png")
+icone = pygame.image.load(parede.pasta+"ave.png")
 pygame.display.set_icon(icone)
-pygame.display.set_caption("Jorge")
+pygame.display.set_caption(parede.pasta+"Jorge")
 
 # inicio
 tela = pygame.sprite.Sprite()
-tela.image = pygame.image.load("noite2.jpg")
+tela.image = pygame.image.load(parede.pasta+"noite2.jpg")
 tela.rect = tela.image.get_rect()
 
 inicio = pygame.sprite.Sprite()
-inicio.image = pygame.image.load("BOTAO.png")
+inicio.image = pygame.image.load(parede.pasta+"BOTAO.png")
 inicio.rect = pygame.Rect([0, 0, 200, 150])
 inicio.rect.center = tela.rect.center
 # scenery
 fase = pygame.sprite.Sprite()
-fase.image = pygame.image.load("noite.jpg")
+fase.image = pygame.image.load(parede.pasta+"noite.jpg")
 fase.rect = fase.image.get_rect()
 
 for i in range(2):
     pisu[i] = pygame.sprite.Sprite()
-    pisu[i].image = pygame.image.load("piso.jpg")
+    pisu[i].image = pygame.image.load(parede.pasta+"piso.jpg")
     pisu[i].rect = pisu[i].image.get_rect()
     pisu[i].rect.bottom = 600
     grupo.add(pisu[i])
@@ -58,50 +62,50 @@ for i in range(2):
 
 # personagem
 guy = pygame.sprite.Sprite()
-guy.image = pygame.image.load("ave.png")  # qual imagem
+guy.image = pygame.image.load(parede.pasta+"ave.png")  # qual imagem
 
 guy.rect = guy.image.get_rect()
 
 # canos
 cano1 = pygame.sprite.Sprite()
-cano1.image = pygame.image.load("canos_a.png")
+cano1.image = pygame.image.load(parede.pasta+"canos_a.png")
 
 cano1.rect = cano1.image.get_rect()
 cano1.rect.top = random.randint(lim_y, lin_y)
 
 cano2 = pygame.sprite.Sprite()
-cano2.image = pygame.image.load("canos_b.png")
+cano2.image = pygame.image.load(parede.pasta+"canos_b.png")
 cano2.rect = cano2.image.get_rect()
 cano2.rect.top = (cano1.rect.bottom + 200)
 cano2.rect.centerx = cano1.rect.centerx
 
 cano3 = pygame.sprite.Sprite()
-cano3.image = pygame.image.load("canos_a.png")
+cano3.image = pygame.image.load(parede.pasta+"canos_a.png")
 
 cano3.rect = cano1.image.get_rect()
 cano3.rect.top = random.randint(lim_y, lin_y)
 
 cano4 = pygame.sprite.Sprite()
-cano4.image = pygame.image.load("canos_b.png")
+cano4.image = pygame.image.load(parede.pasta+"canos_b.png")
 cano4.rect = cano1.image.get_rect()
 cano4.rect.top = (cano3.rect.bottom + 200)
 cano4.rect.centerx = cano3.rect.centerx
 
 
-preto = pygame.image.load("preto.png").convert()
+preto = pygame.image.load(parede.pasta+"preto.png").convert()
 # preto.rect = pygame.Rect([0, 0, 1000, 800])
 
 # gameover images
 
 
 botao_Tentar = pygame.sprite.Sprite()
-botao_Tentar.image = pygame.image.load("Tentar novamente.png")
+botao_Tentar.image = pygame.image.load(parede.pasta+"Tentar novamente.png")
 botao_Tentar.rect = botao_Tentar.image.get_rect()
 botao_Tentar.rect.centerx = 550
 botao_Tentar.rect.bottom = 450
 
 Sair = pygame.sprite.Sprite()
-Sair.image = pygame.image.load("Sair.png")
+Sair.image = pygame.image.load(parede.pasta+"Sair.png")
 Sair.rect = Sair.image.get_rect()
 Sair.rect.bottom = 450
 Sair.rect.centerx = 250
@@ -122,16 +126,13 @@ grupo.add(pisu[0])
 grupo.add(pisu[1])
 
 # musica
-pygame.mixer.music.load("Musica fofa.mp3")
+pygame.mixer.music.load(parede.pasta+"Musica fofa.mp3")
 pygame.mixer.music.play(0)
 
 
 setup()
 
-def setup():
-    cano1.rect.left = 800
-    cano3.rect.left = 1300
-    guy.rect.centerx = fase.rect.centerx
+
 
 while running:
     if True:
@@ -217,14 +218,14 @@ while running:
                 cano3.rect.top = random.randint(lim_y, lin_y)
 
                 cano4.rect.top = (cano3.rect.bottom + 200)
-            if piso2.rect.x < (-1000):
-                piso2.rect.x = -100
-                # if piso1.rect.x:# .rect.x=-10
+            if pisu[1].rect.x < (-1000):
+                pisu[1].rect.x = -100
+                # if pisu[0].rect.x:# .rect.x=-10
             if vivo:
                 cano1.rect.left -= speed
                 cano3.rect.left -= speed
-                piso[0].rect.x -= speed
-                piso[1].rect.x -= speed
+                pisu[0].rect.x -= speed
+                pisu[1].rect.x -= speed
                 if Jump < 40:
                     Jump += 1
             pygame.display.update()

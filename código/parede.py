@@ -1,7 +1,10 @@
 import pygame
+
+pasta = "C:\\Users\\lidif\\OneDrive\\Documentos\\GitHub\\Jorge\\assets\\"
 class parede():
     distancia = 200
-    pasta = "./assets/"
+    
+    
     cano1 = pygame.sprite.Sprite()
     cano2 = pygame.sprite.Sprite()
 
