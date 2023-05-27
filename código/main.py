@@ -1,8 +1,10 @@
 import random
 import sys
 import pygame
+import parede.parede
 
 vivo = False
+pisu = [pygame.sprite.Sprite(), pygame.sprite.Sprite()]
 jump_Speed = 9
 clock = pygame.time.Clock()
 Jump = 39  # final
@@ -219,10 +221,10 @@ while running:
                 piso2.rect.x = -100
                 # if piso1.rect.x:# .rect.x=-10
             if vivo:
-                cano1.rect.left -= 4
-                cano3.rect.left -= 4
-                piso[0].rect.x -= 4
-                piso[1].rect.x -= 4
+                cano1.rect.left -= speed
+                cano3.rect.left -= speed
+                piso[0].rect.x -= speed
+                piso[1].rect.x -= speed
                 if Jump < 40:
                     Jump += 1
             pygame.display.update()
