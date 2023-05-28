@@ -1,6 +1,6 @@
 import pygame
 
-pasta = "C:\\Users\\lidif\\OneDrive\\Documentos\\GitHub\\Jorge\\assets\\"
+pasta = "..\\assets\\"
 class parede():
     distancia = 200
     

@@ -3,6 +3,7 @@ import sys
 import pygame
 import parede
 
+screen = [800,600]
 vivo = False
 speed = 4
 pisu = [pygame.sprite.Sprite(), pygame.sprite.Sprite()]
@@ -15,25 +16,23 @@ lin_y = -100
 running = True
 pulo = True
 etapa = 1
-def setup():
-    cano1.rect.left = 800
-    cano3.rect.left = 1300
-    guy.rect.centerx = fase.rect.centerx
+
+
 # grupo
 comeco = pygame.sprite.Group()
 persona = pygame.sprite.Group()
 grupo = pygame.sprite.Group()
 tela_Final = pygame.sprite.Group()
+colisors = pygame.sprite.Group()
 
 # fonte
 pygame.font.init()
 fonte = pygame.font.get_default_font()
 fontesys = pygame.font.SysFont(fonte, 30)
-txt = f"Pontuação: {pontos}"
-txttela = fontesys.render(txt, True, (0, 0, 0))
+
 
 pygame.init()
-display = pygame.display.set_mode([800, 600])
+display = pygame.display.set_mode(screen)
 icone = pygame.image.load(parede.pasta+"ave.png")
 pygame.display.set_icon(icone)
 pygame.display.set_caption(parede.pasta+"Jorge")
@@ -45,8 +44,8 @@ tela.rect = tela.image.get_rect()
 
 inicio = pygame.sprite.Sprite()
 inicio.image = pygame.image.load(parede.pasta+"BOTAO.png")
-inicio.rect = pygame.Rect([0, 0, 200, 150])
-inicio.rect.center = tela.rect.center
+inicio.rect = inicio.image.get_rect()
+inicio.rect.center = (screen[0]/2,screen[1]/2)
 # scenery
 fase = pygame.sprite.Sprite()
 fase.image = pygame.image.load(parede.pasta+"noite.jpg")
@@ -57,7 +56,7 @@ for i in range(2):
     pisu[i].image = pygame.image.load(parede.pasta+"piso.jpg")
     pisu[i].rect = pisu[i].image.get_rect()
     pisu[i].rect.bottom = 600
-    grupo.add(pisu[i])
+    colisors.add(pisu[i])
 
 
 # personagem
@@ -67,6 +66,7 @@ guy.image = pygame.image.load(parede.pasta+"ave.png")  # qual imagem
 guy.rect = guy.image.get_rect()
 
 # canos
+
 cano1 = pygame.sprite.Sprite()
 cano1.image = pygame.image.load(parede.pasta+"canos_a.png")
 
@@ -110,6 +110,10 @@ Sair.rect = Sair.image.get_rect()
 Sair.rect.bottom = 450
 Sair.rect.centerx = 250
 
+def setup():
+    cano1.rect.left = 800
+    cano3.rect.left = 1300
+    guy.rect.centerx = fase.rect.centerx
 
 comeco.add(tela)
 comeco.add(inicio)
@@ -118,12 +122,12 @@ tela_Final.add(botao_Tentar)
 tela_Final.add(Sair)
 persona.add(guy)
 grupo.add(fase)
-grupo.add(cano1)
-grupo.add(cano2)
-grupo.add(cano3)
-grupo.add(cano4)
-grupo.add(pisu[0])
-grupo.add(pisu[1])
+colisors.add(cano1)
+colisors.add(cano2)
+colisors.add(cano3)
+colisors.add(cano4)
+colisors.add(pisu[0])
+colisors.add(pisu[1])
 
 # musica
 pygame.mixer.music.load(parede.pasta+"Musica fofa.mp3")
@@ -138,8 +142,9 @@ while running:
     if True:
         
 
-        keys = pygame.key.get_pressed()  # boolean
-        while etapa == 1:
+        #keys = pygame.key.get_pressed()
+        # boolean
+        if etapa == 1:
             comeco.draw(display)
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -148,10 +153,10 @@ while running:
                         etapa += 1
                 if event.type == pygame.QUIT:
                     pygame.quit()
-                    sys.exit()
+                    
             pygame.display.update()
 
-        while etapa == 2:
+        if etapa == 2:
 
             for event in pygame.event.get():
                 if vivo:
@@ -187,7 +192,9 @@ while running:
 
             grupo.draw(display)
             persona.draw(display)
-            
+            colisors.draw(display)
+            txt = f"Pontuação: {pontos}"
+            txttela = fontesys.render(txt, True, (0, 0, 0))
             display.blit(txttela, (50, 500))
 
             if not vivo:
@@ -230,7 +237,7 @@ while running:
                     Jump += 1
             pygame.display.update()
         # gameover
-        while etapa == 3:
+        if etapa == 3:
             opacidade = 0
 
             tela_Final.draw(display)
