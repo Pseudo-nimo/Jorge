@@ -16,7 +16,7 @@ lin_y = -100
 gameloop = True
 pulo = True
 etapa = 1
-
+opacidade = 0
 
 # grupo
 comeco = pygame.sprite.Group()
@@ -58,11 +58,7 @@ for i in range(2):
     pisu[i].rect = pisu[i].image.get_rect()
     pisu[i].rect.bottom = 600
     colisors.add(pisu[i])
-
-
-# personagem
 guy = parede.player()
-
 # canos
 
 cano1 = pygame.sprite.Sprite()
@@ -91,10 +87,6 @@ cano4.rect.centerx = cano3.rect.centerx
 
 
 preto = pygame.image.load(parede.pasta+"preto.png").convert()
-# preto.rect = pygame.Rect([0, 0, 1000, 800])
-
-# gameover images
-
 
 botao_Tentar = pygame.sprite.Sprite()
 botao_Tentar.image = pygame.image.load(parede.pasta+"Tentar novamente.png")
@@ -109,17 +101,27 @@ Sair.rect.bottom = 450
 Sair.rect.centerx = 250
 
 def setup():
+    
     cano1.rect.left = 800
     cano3.rect.left = 1300
     guy.rect.centery = 300
     guy.rect.centerx = fase.rect.centerx
+    guy.gravidade = 20
+    persona.add(guy)
+
+def buttons():
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            gameLoop = False
+
+       
 
 comeco.add(tela)
 comeco.add(inicio)
 
 tela_Final.add(botao_Tentar)
 tela_Final.add(Sair)
-persona.add(guy)
+
 grupo.add(fase)
 colisors.add(cano1)
 colisors.add(cano2)
@@ -135,41 +137,30 @@ pygame.mixer.music.play(0)
 
 setup()
 
-
+mouseclick = False
 
 while gameloop:
     
+    buttons()
+    clock.tick(30)
+    for event in pygame.event.get():
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouseclick = True
+        if event.type == pygame.MOUSEBUTTONUP:
+            mouseclick = False
+            
     if etapa == 1:
         comeco.draw(display)
-        for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if inicio.rect.collidepoint(pygame.mouse.get_pos()):
-                    vivo = True
-                    etapa+=1
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                
-        pygame.display.update()
-
+        if inicio.rect.collidepoint(pygame.mouse.get_pos()) and mouseclick:
+            vivo = True
+            etapa+=1
+            
     if etapa == 2:
-        for event in pygame.event.get():        # pular
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                Jump = 0
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    Jump = 0
-            if event.type == pygame.QUIT:
-                sys.exit()
-            # fechar
-
-        
-        # morrer
+        buttons()
         if guy.rect.top < -1:
             guy.rect.top = 0
             vivo = False
-        
-        
+             
         for batida in pygame.sprite.spritecollide(guy, colisors, 0):
             vivo=False
          
@@ -188,19 +179,6 @@ while gameloop:
         
         guy.jump()
         
-        if not vivo:
-            Jump = 39
-            etapa+=1
-        if Jump < 15:
-            #guy.rect.centery -= jump_Speed
-            guy.image = pygame.transform.rotate(guy.image, 0.5)
-        elif Jump < 17:
-            
-            a = 1
-            #guy.rect.centery = guy.rect.centery
-        elif Jump > 16:
-            a =1
-            #guy.rect.centery += jump_Speed
 
         # cano'''
 
@@ -217,50 +195,36 @@ while gameloop:
             cano3.rect.left = 850
             pontos+=1
             cano3.rect.top = random.randint(lim_y, lin_y)
-
             cano4.rect.top = (cano3.rect.bottom + 200)
         if pisu[1].rect.x < (-1000):
             pisu[1].rect.x = -100
-            # if pisu[0].rect.x:# .rect.x=-10
-        if vivo:
-           
-            if Jump < 40:
-                Jump += 1
-        pygame.display.update()
+            
+        if not vivo:
+            etapa+=1
+        
     # gameover
     if etapa == 3:
-        opacidade = 0
-
+        
+        display.blit(preto, (0, 0))  
+        
         tela_Final.draw(display)
-        # Set the image"s alpha value
 
         fontes = pygame.font.SysFont(fonte, 72)
         txtr = fontes.render(f"Pontuação: {pontos}", True, [255, 255, 255])
 
         if opacidade < 255:
-            # a
-            opacidade += 255 / 60
-            # Change the transparency variable
-        preto.set_alpha(opacidade)  # Set the image"s alpha value
-        display.blit(preto, (0, 0))  # Display the image
+           opacidade += 255 / 60
+          
+        preto.set_alpha(opacidade) 
         display.blit(txtr, (200, 250))
         
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                gameLoop = False
-
-                # ir de novo
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if botao_Tentar.rect.collidepoint(pygame.mouse.get_pos()):
-                    vivo = True
-                    etapa -= 1
-
-                    pontos = 0
-                    
-                    setup()
-
-                if Sair.rect.collidepoint(pygame.mouse.get_pos()):
-                    sys.exit()
-        pygame.display.update()  # Update the screen
-        clock.tick(1)
+        if mouseclick:
+            if botao_Tentar.rect.collidepoint(pygame.mouse.get_pos()):
+                vivo = True
+                etapa -= 1
+                pontos = 0
+                setup()
+        
+    pygame.display.update()  # Update the screen
+        
 

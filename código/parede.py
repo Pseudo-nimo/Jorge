@@ -1,7 +1,7 @@
 import pygame
 
 pasta = "..\\assets\\"
-gravidade = 9
+
 class parede():
     distancia = 200
     
@@ -23,7 +23,7 @@ class parede():
         
 class player(pygame.sprite.Sprite):
     
-    
+    gravidade = 9
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(pasta+"ave.png")  # qual imagem
@@ -31,14 +31,14 @@ class player(pygame.sprite.Sprite):
     
     #gravidade = 0
     def jump(self):
-        global gravidade
+        
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN: 
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    print("debug")
-                    gravidade = -20
-                    gravidade = gravidade + 1
-        self.rect.y = self.rect.y + gravidade
+                    self.gravidade = -18
+
+        self.gravidade += 1
+        self.rect.y += self.gravidade
 
 
 
