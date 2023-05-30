@@ -1,5 +1,4 @@
 import random
-import sys
 import pygame
 import parede
 
@@ -13,11 +12,12 @@ Jump = 20   # final
 pontos = 0
 lim_y = -314
 lin_y = -100
-gameloop = True
+gameLoop = True
 pulo = True
 etapa = 1
 opacidade = 0
-
+init = False
+meio = (screen[0]/2,screen[1]/2)
 # grupo
 comeco = pygame.sprite.Group()
 persona = pygame.sprite.Group()
@@ -43,10 +43,7 @@ tela = pygame.sprite.Sprite()
 tela.image = pygame.image.load(parede.pasta+"noite2.jpg")
 tela.rect = tela.image.get_rect()
 
-inicio = pygame.sprite.Sprite()
-inicio.image = pygame.image.load(parede.pasta+"BOTAO.png")
-inicio.rect = inicio.image.get_rect()
-inicio.rect.center = (screen[0]/2,screen[1]/2)
+
 # scenery
 fase = pygame.sprite.Sprite()
 fase.image = pygame.image.load(parede.pasta+"noite.jpg")
@@ -58,27 +55,21 @@ for i in range(2):
     pisu[i].rect = pisu[i].image.get_rect()
     pisu[i].rect.bottom = 600
     colisors.add(pisu[i])
+    
 guy = parede.player()
-# canos
-
 cano1 = pygame.sprite.Sprite()
 cano1.image = pygame.image.load(parede.pasta+"canos_a.png")
-
 cano1.rect = cano1.image.get_rect()
 cano1.rect.top = random.randint(lim_y, lin_y)
-
 cano2 = pygame.sprite.Sprite()
 cano2.image = pygame.image.load(parede.pasta+"canos_b.png")
 cano2.rect = cano2.image.get_rect()
 cano2.rect.top = (cano1.rect.bottom + 200)
 cano2.rect.centerx = cano1.rect.centerx
-
 cano3 = pygame.sprite.Sprite()
 cano3.image = pygame.image.load(parede.pasta+"canos_a.png")
-
 cano3.rect = cano1.image.get_rect()
 cano3.rect.top = random.randint(lim_y, lin_y)
-
 cano4 = pygame.sprite.Sprite()
 cano4.image = pygame.image.load(parede.pasta+"canos_b.png")
 cano4.rect = cano1.image.get_rect()
@@ -87,12 +78,14 @@ cano4.rect.centerx = cano3.rect.centerx
 
 
 preto = pygame.image.load(parede.pasta+"preto.png").convert()
+inicio = parede.button("BOTAO.png")
+inicio.rect.center = (meio)
 
-botao_Tentar = pygame.sprite.Sprite()
-botao_Tentar.image = pygame.image.load(parede.pasta+"Tentar novamente.png")
-botao_Tentar.rect = botao_Tentar.image.get_rect()
-botao_Tentar.rect.centerx = 550
-botao_Tentar.rect.bottom = 450
+againButton = pygame.sprite.Sprite()
+againButton.image = pygame.image.load(parede.pasta+"Tentar novamente.png")
+againButton.rect = againButton.image.get_rect()
+againButton.rect.centerx = 550
+againButton.rect.bottom = 450
 
 Sair = pygame.sprite.Sprite()
 Sair.image = pygame.image.load(parede.pasta+"Sair.png")
@@ -102,6 +95,9 @@ Sair.rect.centerx = 250
 
 def setup():
     
+    speed = 0
+    init = False
+    pontos=0
     cano1.rect.left = 800
     cano3.rect.left = 1300
     guy.rect.centery = 300
@@ -109,17 +105,10 @@ def setup():
     guy.gravidade = 20
     persona.add(guy)
 
-def buttons():
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            gameLoop = False
-
-       
-
 comeco.add(tela)
 comeco.add(inicio)
 
-tela_Final.add(botao_Tentar)
+tela_Final.add(againButton)
 tela_Final.add(Sair)
 
 grupo.add(fase)
@@ -139,15 +128,19 @@ setup()
 
 mouseclick = False
 
-while gameloop:
-    
-    buttons()
-    clock.tick(30)
+while gameLoop:
+    print("a")
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouseclick = True
+            
         if event.type == pygame.MOUSEBUTTONUP:
             mouseclick = False
+            
+        if event.type == pygame.QUIT:
+            gameLoop = False
+            
             
     if etapa == 1:
         comeco.draw(display)
@@ -156,7 +149,19 @@ while gameloop:
             etapa+=1
             
     if etapa == 2:
-        buttons()
+        
+        for event in pygame.event.get():
+            print("debug")
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    print("debug")
+                    init = True
+                    
+        if init:
+            speed = 4
+            guy.jump()
+        else:
+            speed = 0
         if guy.rect.top < -1:
             guy.rect.top = 0
             vivo = False
@@ -177,10 +182,7 @@ while gameloop:
         pisu[0].rect.x -= speed
         pisu[1].rect.x -= speed
         
-        guy.jump()
         
-
-        # cano'''
 
         cano2.rect.centerx = cano1.rect.centerx
         cano4.rect.centerx = cano3.rect.centerx
@@ -205,8 +207,7 @@ while gameloop:
     # gameover
     if etapa == 3:
         
-        display.blit(preto, (0, 0))  
-        
+        display.blit(preto, (0, 0))         
         tela_Final.draw(display)
 
         fontes = pygame.font.SysFont(fonte, 72)
@@ -214,17 +215,17 @@ while gameloop:
 
         if opacidade < 255:
            opacidade += 255 / 60
-          
+     
         preto.set_alpha(opacidade) 
         display.blit(txtr, (200, 250))
         
-        if mouseclick:
-            if botao_Tentar.rect.collidepoint(pygame.mouse.get_pos()):
-                vivo = True
-                etapa -= 1
-                pontos = 0
-                setup()
-        
+        if againButton.rect.collidepoint(pygame.mouse.get_pos()) and mouseclick:
+            vivo = True
+            etapa -= 1
+            setup()
+            
+        if Sair.rect.collidepoint(pygame.mouse.get_pos()) and mouseclick:
+            gameLoop=False
+    
     pygame.display.update()  # Update the screen
-        
-
+pygame.quit()
