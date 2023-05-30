@@ -101,7 +101,7 @@ Sair.rect.bottom = 450
 Sair.rect.centerx = 250
 
 def setup():
-    
+    vivo = True
     cano1.rect.left = 800
     cano3.rect.left = 1300
     guy.rect.centery = 300
@@ -132,7 +132,7 @@ colisors.add(pisu[1])
 
 # musica
 pygame.mixer.music.load(parede.pasta+"Musica fofa.mp3")
-pygame.mixer.music.play(0)
+#pygame.mixer.music.play(0)
 
 
 setup()
@@ -143,6 +143,7 @@ while gameloop:
     
     buttons()
     clock.tick(30)
+    
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouseclick = True
@@ -189,13 +190,14 @@ while gameloop:
             cano1.rect.left = 850
             pontos+=1
             cano1.rect.top = random.randint(lim_y, lin_y)
-
             cano2.rect.top = (cano1.rect.bottom + 200)
+            
         if cano3.rect.right < 0:
             cano3.rect.left = 850
             pontos+=1
             cano3.rect.top = random.randint(lim_y, lin_y)
             cano4.rect.top = (cano3.rect.bottom + 200)
+            
         if pisu[1].rect.x < (-1000):
             pisu[1].rect.x = -100
             
@@ -204,27 +206,30 @@ while gameloop:
         
     # gameover
     if etapa == 3:
-        
+        '''
+        if opacidade < 255:
+           opacidade += 255 / 60
+        preto.set_alpha(opacidade) 
         display.blit(preto, (0, 0))  
+        '''
         
         tela_Final.draw(display)
 
         fontes = pygame.font.SysFont(fonte, 72)
         txtr = fontes.render(f"Pontuação: {pontos}", True, [255, 255, 255])
 
-        if opacidade < 255:
-           opacidade += 255 / 60
+       
           
-        preto.set_alpha(opacidade) 
+        
         display.blit(txtr, (200, 250))
         
         if mouseclick:
-            if botao_Tentar.rect.collidepoint(pygame.mouse.get_pos()):
-                vivo = True
+            if botao_Tentar.rect.collidepoint(pygame.mouse.get_pos()):   
                 etapa -= 1
-                pontos = 0
                 setup()
         
+    #maintance
+    
     pygame.display.update()  # Update the screen
         
 
