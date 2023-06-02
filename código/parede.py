@@ -1,4 +1,5 @@
 import pygame
+import random
 
 pasta = "..\\assets\\"
 
@@ -9,15 +10,23 @@ class parede():
     
     def __init__(self):
         pygame.sprite.Sprite().__init__()
+        self.initial()
         
+    def atualize(self):
+        self.canos[0].rect.centerx = self.canos[1].rect.centerx
+        self.canos[1].rect.top = (self.canos[0].rect.bottom + 200)
+    def walk(self):
+        self.canos[0].rect.right -= self.speed
+        if self.canos[0].rect.right < 0:
+            self.canos[0].rect.top = random.randint(0, 100)
+            self.canos[0].rect.left = 850
+        self.atualize()
+    def initial(self):
         self.canos[1-1].image = pygame.image.load(pasta+"canos_a.png")
         self.canos[1-1].rect = self.canos[0].image.get_rect()
         self.canos[2-1].image = pygame.image.load(pasta+"canos_b.png")
         self.canos[2-1].rect = self.canos[1].image.get_rect()
-    def atualize(self):
-        self.canos[0].rect.centerx = self.canos[1].rect.centerx
-        self.canos[1].rect.top = (self.canos[0].rect.bottom + 200)
-        
+        self.canos[0].rect.left = 800
         
         
 class player(pygame.sprite.Sprite):

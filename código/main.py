@@ -3,6 +3,7 @@ import pygame
 import parede
 
 screen = [800,600]
+pygame.sprite.Sprite().__init__()
 vivo = False
 speed = 4
 pisu = [pygame.sprite.Sprite(), pygame.sprite.Sprite()]
@@ -140,7 +141,7 @@ mouseclick = False
 while gameloop:
     
     
-    clock.tick(30)
+    clock.tick(60)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             break
@@ -171,7 +172,10 @@ while gameloop:
             moving = False
             
     if etapa == 2:
-        print(space)
+        canoteste.canos[0].rect.left-=4
+        canoteste.walk()
+        #canoteste.canos[0].rect.left+=1
+        print(canoteste.canos[0].rect.left)
         grupo.draw(display)
         persona.draw(display)
         colisors.draw(display)
@@ -181,27 +185,27 @@ while gameloop:
             txt = f"Pontuação: {pontos}"
             txttela = fontesys.render(txt, True, (0, 0, 0))
             display.blit(txttela, (50, 500))
-            canoteste.canos[0].rect.left -=speed
-            cano1.rect.left -= speed
-            cano3.rect.left -= speed
+            #
+            #cano1.rect.left -= speed
+            #cano3.rect.left -= speed
             pisu[0].rect.x -= speed
             pisu[1].rect.x -= speed
             guy.jump()
+            
         
 
         # cano'''
 
         cano2.rect.centerx = cano1.rect.centerx
         cano4.rect.centerx = cano3.rect.centerx
-        canoteste.atualize()
+        
         if guy.rect.top < -1:
             guy.rect.top = 0
             vivo = False
              
         for batida in pygame.sprite.spritecollide(guy, colisors, 0):
             vivo=False
-        if canoteste.canos[0].rect.right < 0:
-            canoteste.canos[0].rect.top = random.randint(lim_y, lin_y)
+        
             
         if cano1.rect.right < 0:
             cano1.rect.left = 850
@@ -241,6 +245,7 @@ while gameloop:
             vivo = True
             cano1.rect.left = 800
             cano3.rect.left = 1300
+            
             guy.rect.centery = 300
             guy.rect.centerx = fase.rect.centerx
             guy.gravidade = 20
