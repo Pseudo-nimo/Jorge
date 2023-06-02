@@ -141,7 +141,7 @@ mouseclick = False
 while gameloop:
     
     
-    clock.tick(60)
+    clock.tick(30)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             break
@@ -172,8 +172,8 @@ while gameloop:
             moving = False
             
     if etapa == 2:
-        canoteste.canos[0].rect.left-=4
-        canoteste.walk()
+        
+        
         #canoteste.canos[0].rect.left+=1
         print(canoteste.canos[0].rect.left)
         grupo.draw(display)
@@ -185,7 +185,7 @@ while gameloop:
             txt = f"Pontuação: {pontos}"
             txttela = fontesys.render(txt, True, (0, 0, 0))
             display.blit(txttela, (50, 500))
-            #
+            canoteste.walk()
             #cano1.rect.left -= speed
             #cano3.rect.left -= speed
             pisu[0].rect.x -= speed
