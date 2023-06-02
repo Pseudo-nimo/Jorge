@@ -22,8 +22,8 @@ class parede():
         cano2.rect.centerx = cano1.rect.centerx
         
 class player(pygame.sprite.Sprite):
-    
-    gravidade = 9
+    jumpForce = 18
+    gravidade = 0
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(pasta+"ave.png")  # qual imagem
@@ -33,14 +33,22 @@ class player(pygame.sprite.Sprite):
     def jump(self):
         
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_SPACE:
-                    self.gravidade = -18
+                    self.gravidade = -self.jumpForce
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.gravidade = -self.jumpForce
 
-        self.gravidade += 1
+        self.gravidade += 0.01
         self.rect.y += self.gravidade
-
-
+class button(pygame.sprite.Sprite):
+    
+    def __init__(self, a: str):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(pasta+a)
+        self.rect = self.image.get_rect()
+    
 
 #screen.blit(heroi, heroi_rect)
         
+
