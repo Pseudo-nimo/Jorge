@@ -4,22 +4,21 @@ pasta = "..\\assets\\"
 
 class parede():
     distancia = 200
-    
-    
-    cano1 = pygame.sprite.Sprite()
-    cano2 = pygame.sprite.Sprite()
-
+    speed =-4
+    canos = [pygame.sprite.Sprite(),pygame.sprite.Sprite()]
     
     def __init__(self):
-        a=1
-    def lepard(self):
-        cano1.rect = cano1.image.get_rect()
-        cano1.image = pygame.image.load(pasta+"canos_a.png")
-        cano1.rect.top = -100
-        cano2.image = pygame.image.load(pasta+"canos_b.png")
-        cano2.rect = cano2.image.get_rect()
-        cano2.rect.top = (cano1.rect.bottom + distancia)
-        cano2.rect.centerx = cano1.rect.centerx
+        pygame.sprite.Sprite().__init__()
+        
+        self.canos[1-1].image = pygame.image.load(pasta+"canos_a.png")
+        self.canos[1-1].rect = self.canos[0].image.get_rect()
+        self.canos[2-1].image = pygame.image.load(pasta+"canos_b.png")
+        self.canos[2-1].rect = self.canos[1].image.get_rect()
+    def atualize(self):
+        self.canos[0].rect.centerx = self.canos[1].rect.centerx
+        self.canos[1].rect.top = (self.canos[0].rect.bottom + 200)
+        
+        
         
 class player(pygame.sprite.Sprite):
     jumpForce = 18
@@ -39,8 +38,9 @@ class player(pygame.sprite.Sprite):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.gravidade = -self.jumpForce
 
-        self.gravidade += 0.01
+        self.gravidade += 1
         self.rect.y += self.gravidade
+        
 class button(pygame.sprite.Sprite):
     
     def __init__(self, a: str):
@@ -49,6 +49,6 @@ class button(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
     
 
-#screen.blit(heroi, heroi_rect)
+
         
 
