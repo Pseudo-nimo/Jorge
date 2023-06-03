@@ -7,7 +7,7 @@ class parede():
     distancia = 200
     speed =4
     canos = [pygame.sprite.Sprite(),pygame.sprite.Sprite()]
-    
+    points = 0
     def __init__(self):
         #pygame.sprite.Sprite().__init__()
         self.initial()
@@ -18,6 +18,7 @@ class parede():
     def walk(self):
         self.canos[0].rect.right -= self.speed
         if self.canos[0].rect.right < 0:
+            self.points+=1
             self.canos[0].rect.top = random.randint(-314,-100)
             self.canos[0].rect.left = 850
         self.atualize()

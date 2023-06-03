@@ -11,7 +11,7 @@ pontos = 0
 gameloop = True
 etapa = 1
 opacidade = 0.0
-fps = 100
+fps = 200
 moving = False
 space = False
 mouseclick = False
@@ -76,6 +76,7 @@ def setup():
     moving = False
     space = False
     mouseclick = False
+    canoteste.points = 0
     canoteste.reinit()
     guy.momentum = 0
     guy.rect.centery = 300
@@ -88,10 +89,10 @@ tela_Final.add(botao_Tentar)
 tela_Final.add(Sair)
 grupo.add(fase)
 persona.add(guy)
-colisors.add(pisu[0])
-colisors.add(pisu[1])
 colisors.add(canoteste.canos[0])
 colisors.add(canoteste.canos[1])
+colisors.add(pisu[0])
+colisors.add(pisu[1])
 
 # musica
 pygame.mixer.music.load(parede.pasta+"Musica fofa.mp3")
@@ -100,7 +101,7 @@ pygame.mixer.music.load(parede.pasta+"Musica fofa.mp3")
 
 setup()
 while gameloop:
-    clock.tick(fps)
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             break
@@ -128,9 +129,10 @@ while gameloop:
         grupo.draw(display)
         persona.draw(display)
         colisors.draw(display)
+        pontos = canoteste.points
         fontes = pygame.font.SysFont(fonte, 72)
         txtr = fontes.render(str(pontos), True, [255, 255, 255])
-        display.blit(txtr, (200, -70))
+        display.blit(txtr, (200, 0))
         
         if moving:
             canoteste.walk()
@@ -169,4 +171,5 @@ while gameloop:
             break
 
     pygame.display.update()
+    clock.tick(fps)
 pygame.quit()        
