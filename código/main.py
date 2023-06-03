@@ -1,4 +1,3 @@
-import random
 import pygame
 import parede
 
@@ -77,11 +76,12 @@ Sair.rect.bottom = 450
 Sair.rect.centerx = 250
 
 def setup():
-    vivo = True
     canoteste.reinit()
+    guy.jumpForce = 90
+    guy.gravidade = 0
     guy.rect.centery = 300
     guy.rect.centerx = fase.rect.centerx
-    guy.gravidade = 20
+    
     
 comeco.add(tela)
 comeco.add(inicio)
@@ -91,10 +91,11 @@ tela_Final.add(Sair)
 
 grupo.add(fase)
 persona.add(guy)
-colisors.add(canoteste.canos[0])
-colisors.add(canoteste.canos[1])
+
 colisors.add(pisu[0])
 colisors.add(pisu[1])
+colisors.add(canoteste.canos[0])
+colisors.add(canoteste.canos[1])
 
 # musica
 pygame.mixer.music.load(parede.pasta+"Musica fofa.mp3")
@@ -105,9 +106,10 @@ setup()
 moving = False
 space = False
 mouseclick = False
+fps = 100
 
 while gameloop:
-    clock.tick(30)
+    clock.tick(fps)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             break
@@ -129,20 +131,23 @@ while gameloop:
         comeco.draw(display)
         if inicio.rect.collidepoint(pygame.mouse.get_pos()) and mouseclick:
             etapa = 2
+            vivo = True
+            setup()
             
     if etapa == 2:
-
+        guy.fps = fps
         grupo.draw(display)
         persona.draw(display)
         colisors.draw(display)
-
+        txt = f"Pontuação: {pontos}"
+        txttela = fontesys.render(txt, True, (0, 0, 0))
+        display.blit(txttela, (50, 500))
+        
         if moving:
-            txt = f"Pontuação: {pontos}"
-            txttela = fontesys.render(txt, True, (0, 0, 0))
-            display.blit(txttela, (50, 500))
             canoteste.walk()
             pisu[0].rect.x -= speed
             pisu[1].rect.x -= speed
+            
             guy.jump()
             if pisu[1].rect.x < (-1000):
                 pisu[1].rect.x = -100
@@ -153,7 +158,7 @@ while gameloop:
              
         for batida in pygame.sprite.spritecollide(guy, colisors, False):
             a = 0
-            #vivo=False
+            vivo=False
         
         if not vivo:
             etapa=3
@@ -162,7 +167,7 @@ while gameloop:
     if etapa == 3:
         
         if opacidade < 255:
-           opacidade += 255 / 60
+            opacidade += 255 / 60
         preto.set_alpha(opacidade)
         fontes = pygame.font.SysFont(fonte, 72)
         txtr = fontes.render(f"Pontuação: {pontos}", True, [255, 255, 255])
@@ -171,6 +176,7 @@ while gameloop:
         tela_Final.draw(display)
         if botao_Tentar.rect.collidepoint(pygame.mouse.get_pos()) and mouseclick:
             etapa = 2
+            vivo = True
             setup()
         if Sair.rect.collidepoint(pygame.mouse.get_pos()) and mouseclick:
             break

@@ -9,7 +9,7 @@ class parede():
     canos = [pygame.sprite.Sprite(),pygame.sprite.Sprite()]
     
     def __init__(self):
-        pygame.sprite.Sprite().__init__()
+        #pygame.sprite.Sprite().__init__()
         self.initial()
         
     def atualize(self):
@@ -27,6 +27,8 @@ class parede():
         self.canos[2-1].image = pygame.image.load(pasta+"canos_b.png")
         self.canos[2-1].rect = self.canos[1].image.get_rect()
         self.canos[0].rect.left = 850
+        self.canos[0].rect.top = random.randint(-314,-100)
+        
     def reinit(self):
         self.canos[0].rect.left = 850
         
@@ -35,24 +37,21 @@ class parede():
         
 class player(pygame.sprite.Sprite):
     jumpForce = 18
-    gravidade = 0
+    gravidade = 0.0
+    fps = 1
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.image.load(pasta+"ave.png")  # qual imagem
         self.rect = self.image.get_rect()
-    
-    #gravidade = 0
-    def jump(self):
-        
+    def jump(self):        
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_SPACE or event.key == pygame.K_k: 
-                    self.gravidade = -self.jumpForce
-                
+                    self.gravidade = -self.jumpForce/self.fps
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.gravidade = -self.jumpForce
+                self.gravidade = -self.jumpForce/self.fps
 
-        self.gravidade += 1
+        self.gravidade += 1/self.fps
         self.rect.y += self.gravidade
         
 class button(pygame.sprite.Sprite):
