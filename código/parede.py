@@ -27,9 +27,10 @@ class parede():
         self.canos[2-1].image = pygame.image.load(pasta+"canos_b.png")
         self.canos[2-1].rect = self.canos[1].image.get_rect()
         self.canos[0].rect.left = 850
-    def reinit():
-        a =0
-        this.canos[0].rect.left = 850
+    def reinit(self):
+        self.canos[0].rect.left = 850
+        
+        self.atualize()
         
         
 class player(pygame.sprite.Sprite):
@@ -45,8 +46,9 @@ class player(pygame.sprite.Sprite):
         
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN :
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE or event.key == pygame.K_k: 
                     self.gravidade = -self.jumpForce
+                
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.gravidade = -self.jumpForce
 
