@@ -138,7 +138,7 @@ while gameloop:
             canoteste.walk()
             pisu[0].rect.x -= speed
             pisu[1].rect.x -= speed
-            guy.gravidade = fps*0.5
+            guy.gravidade = fps*0.3
             guy.jumpForce = fps*10
             guy.jump()
             if pisu[1].rect.x < (-1000):
@@ -172,4 +172,5 @@ while gameloop:
 
     pygame.display.update()
     clock.tick(fps)
+    
 pygame.quit()        
