@@ -36,7 +36,8 @@ class parede():
         
         
 class player(pygame.sprite.Sprite):
-    jumpForce = 18
+    jumpForce = 0.0
+    momentum = 0.0
     gravidade = 0.0
     fps = 1
     def __init__(self):
@@ -47,12 +48,12 @@ class player(pygame.sprite.Sprite):
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN :
                 if event.key == pygame.K_SPACE or event.key == pygame.K_k: 
-                    self.gravidade = -self.jumpForce/self.fps
+                    self.momentum = -self.jumpForce/self.fps
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.gravidade = -self.jumpForce/self.fps
+                self.momentum = -self.jumpForce/self.fps
 
-        self.gravidade += 1/self.fps
-        self.rect.y += self.gravidade
+        self.momentum += self.gravidade/self.fps
+        self.rect.y += self.momentum
         
 class button(pygame.sprite.Sprite):
     
