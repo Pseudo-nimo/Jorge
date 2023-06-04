@@ -2,7 +2,6 @@ import pygame
 import parede
 
 screen = [800,600]
-pygame.sprite.Sprite().__init__()
 vivo = False
 speed = 4
 pisu = [pygame.sprite.Sprite(), pygame.sprite.Sprite()]
@@ -52,13 +51,12 @@ for i in range(2):
     pisu[i] = pygame.sprite.Sprite()
     pisu[i].image = pygame.image.load(parede.pasta+"piso.jpg")
     pisu[i].rect = pisu[i].image.get_rect()
-    pisu[i].rect.bottom = 600
+    pisu[i].rect.bottom = display.get_height()
     colisors.add(pisu[i])
 guy = parede.player()
 # canos
 
-
-canoteste = parede.parede()
+obst = [parede.parede(),parede.parede()]
 preto = pygame.image.load(parede.pasta+"preto.png").convert()
 
 botao_Tentar = parede.button("Tentar novamente.png")
@@ -73,15 +71,22 @@ def setup():
     global moving
     global space
     global mouseclick
+    global obst
     moving = False
     space = False
     mouseclick = False
-    canoteste.points = 0
-    canoteste.reinit()
+    obst[0].points = 0
+    obst[1].points = 0
+    obst[0].canos[0].rect.left = 850
+    print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
+    obst[1].canos[0].rect.left = 1250
+    print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
     guy.momentum = 0
     guy.rect.centery = 300
     guy.rect.centerx = fase.rect.centerx
     guy.fps = fps
+    obst[0].atualize()
+    obst[1].atualize()
     
 comeco.add(tela)
 comeco.add(inicio)
@@ -89,8 +94,10 @@ tela_Final.add(botao_Tentar)
 tela_Final.add(Sair)
 grupo.add(fase)
 persona.add(guy)
-colisors.add(canoteste.canos[0])
-colisors.add(canoteste.canos[1])
+colisors.add(obst[0].canos[0])
+colisors.add(obst[0].canos[1])
+colisors.add(obst[1].canos[0])
+colisors.add(obst[1].canos[1])
 colisors.add(pisu[0])
 colisors.add(pisu[1])
 
@@ -98,13 +105,14 @@ colisors.add(pisu[1])
 pygame.mixer.music.load(parede.pasta+"Musica fofa.mp3")
 #pygame.mixer.music.play(0)
 
-
+print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
 setup()
+print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
 while gameloop:
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            break
+            pygame.quit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouseclick = True
             moving = True
@@ -129,30 +137,38 @@ while gameloop:
         grupo.draw(display)
         persona.draw(display)
         colisors.draw(display)
-        pontos = canoteste.points
+        pontos =  obst[1].points   + obst[0].points 
         fontes = pygame.font.SysFont(fonte, 72)
         txtr = fontes.render(str(pontos), True, [255, 255, 255])
         display.blit(txtr, (200, 0))
         
         if moving:
-            canoteste.walk()
-            pisu[0].rect.x -= speed
-            pisu[1].rect.x -= speed
+            obst[0].walk()
+            obst[1].walk()
             guy.gravidade = fps*0.3
             guy.jumpForce = fps*10
             guy.jump()
-            if pisu[1].rect.x < (-1000):
-                pisu[1].rect.x = -100
+        else:
+            obst[0].canos[0].rect.left = 850
+            obst[1].canos[0].rect.left = 1250
+            print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
+        
+        pisu[1].rect.x -= speed
+        pisu[0].rect.x -= speed
+        if pisu[1].rect.x < (-1000):
+            pisu[1].rect.x = -100
     
         if guy.rect.top < -1:
             guy.rect.top =18
             vivo = False
+            
         for batida in pygame.sprite.spritecollide(guy, colisors, False):
             a = 0
             vivo=False
         if not vivo:
             vivo = True
-            setup()   
+            setup()
+            
     if etapa == 3:
         
         if opacidade < 255:
@@ -169,8 +185,9 @@ while gameloop:
             setup()
         if Sair.rect.collidepoint(pygame.mouse.get_pos()) and mouseclick:
             break
-
+    
+    #print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
     pygame.display.update()
-    clock.tick(fps)
+    fps = clock.get_fps()+1
     
 pygame.quit()        
