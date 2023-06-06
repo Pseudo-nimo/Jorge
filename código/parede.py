@@ -8,26 +8,33 @@ class parede():
     speed =4
     canos = [pygame.sprite.Sprite(),pygame.sprite.Sprite()]
     points = 0
-    reinitX = 850
+    reinitX = 3000
     def __init__(self):
         
         self.canos[1-1].image = pygame.image.load(pasta+"canos_a.png")
         self.canos[1-1].rect = self.canos[0].image.get_rect()
         self.canos[2-1].image = pygame.image.load(pasta+"canos_b.png")
         self.canos[2-1].rect = self.canos[1].image.get_rect()
-        self.canos[0].rect.top = random.randint(-314,-100)
-        self.canos[0].rect.left = self.reinitX
+        self.canos[0].rect.top = random.randint(-350,-200)
+        self.reinitX = pygame.display.get_window_size()[0]
+        self.original()
+        
         
     def atualize(self):
         self.canos[1].rect.centerx = self.canos[0].rect.centerx
         self.canos[1].rect.top = (self.canos[0].rect.bottom + 200)
         
+        
     def walk(self):
         self.canos[0].rect.right -= self.speed
         if self.canos[0].rect.right < 0:
-            self.points+=1
             self.canos[0].rect.top = random.randint(-314,-100)
-            self.canos[0].rect.left = self.reinitX
+            self.original()
+        if round(self.canos[0].rect.right) < round(pygame.display.get_window_size()[0]/2):
+            self.points+=1
+        self.atualize()
+    def original(self):
+        self.canos[0].rect.left = self.reinitX
         self.atualize()
     
         

@@ -1,9 +1,9 @@
 import pygame
 import parede
 
-screen = [800,600]
+screen = (1600,900)
 vivo = False
-speed = 4
+speed = 3
 pisu = [pygame.sprite.Sprite(), pygame.sprite.Sprite()]
 clock = pygame.time.Clock()
 pontos = 0
@@ -29,7 +29,9 @@ fontesys = pygame.font.SysFont(fonte, 30)
 
 
 pygame.init()
-display = pygame.display.set_mode(screen)
+
+display = pygame.display.set_mode(screen, pygame.FULLSCREEN)
+
 
 icone = pygame.image.load(parede.pasta+"ave.png")
 pygame.display.set_icon(icone)
@@ -38,6 +40,7 @@ pygame.display.set_caption("Jorge")
 # inicio
 tela = pygame.sprite.Sprite()
 tela.image = pygame.image.load(parede.pasta+"noite2.jpg")
+tela.image = pygame.transform.scale_by(tela.image.convert(), (pygame.display.get_window_size()[0]/tela.image.get_width() ))
 tela.rect = tela.image.get_rect()
 
 inicio = parede.button("BOTAO.png")
@@ -45,6 +48,8 @@ inicio.rect.center = (int(screen[0]/2),int(screen[1]/2))
 # scenery
 fase = pygame.sprite.Sprite()
 fase.image = pygame.image.load(parede.pasta+"noite.jpg")
+fase.image = pygame.transform.scale_by(fase.image.convert(), (pygame.display.get_window_size()[0]/fase.image.get_width() ))
+
 fase.rect = fase.image.get_rect()
 
 for i in range(2):
@@ -72,21 +77,15 @@ def setup():
     global space
     global mouseclick
     global obst
-    moving = False
-    space = False
+    moving =  space = False
     mouseclick = False
+    
     obst[0].points = 0
     obst[1].points = 0
-    obst[0].canos[0].rect.left = 850
-    print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
-    obst[1].canos[0].rect.left = 1250
-    print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
-    guy.momentum = 0
+    guy.momentum = -guy.jumpForce/2
     guy.rect.centery = 300
     guy.rect.centerx = fase.rect.centerx
     guy.fps = fps
-    obst[0].atualize()
-    obst[1].atualize()
     
 comeco.add(tela)
 comeco.add(inicio)
@@ -105,9 +104,9 @@ colisors.add(pisu[1])
 pygame.mixer.music.load(parede.pasta+"Musica fofa.mp3")
 #pygame.mixer.music.play(0)
 
-print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
+
 setup()
-print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
+
 while gameloop:
     
     for event in pygame.event.get():
@@ -119,12 +118,14 @@ while gameloop:
         if event.type == pygame.MOUSEBUTTONUP:
             mouseclick = False
         if event.type == pygame.KEYDOWN :
-            if event.key == pygame.K_SPACE:
-                moving = True
-                space = True
+            
+            moving = True
+            space = True
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
         if event.type == pygame.KEYUP: 
-            if event.key == pygame.K_SPACE:
-                space = False
+            
+            space = False
     if etapa == 1:
         comeco.draw(display)
         if inicio.rect.collidepoint(pygame.mouse.get_pos()) and mouseclick:
@@ -149,8 +150,10 @@ while gameloop:
             guy.jumpForce = fps*10
             guy.jump()
         else:
-            obst[0].canos[0].rect.left = 850
-            obst[1].canos[0].rect.left = 1250
+            obst[0].original()
+            obst[0].reinitX = pygame.display.get_window_size()[0]
+            obst[1].original()
+            obst[1].reinitX = pygame.display.get_window_size()[0]
             print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
         
         pisu[1].rect.x -= speed
@@ -189,5 +192,6 @@ while gameloop:
     #print(obst[0].canos[0].rect.left,obst[1].canos[0].rect.left)
     pygame.display.update()
     fps = clock.get_fps()+1
+    
     
 pygame.quit()        
